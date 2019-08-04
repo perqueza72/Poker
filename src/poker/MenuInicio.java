@@ -1,18 +1,20 @@
 package poker;
 
-import javafx.scene.layout.BorderWidths;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MenuInicio extends JPanel {
 
-    JButton botonPrueba;
-    JPanel centro;
-    JLabel fondo;
-    Color colorCentro;
-    Insets marginTextCenter, nonMargin;
-    final int widthWindow = 1024, heightWindow = 768, tBoton = 100;
+    protected JButton botonPrueba;
+    private JPanel centro;
+    private JLabel fondo;
+    private Color colorCentro;
+    private Insets marginTextCenter, nonMargin;
+    private Font fontTitle, fontButton, fontOther;
+
+    private final int widthWindow = 1024, heightWindow = 768, tBoton = 100;
+    private boolean pasar = false;
 
     public void inicializar()
     {
@@ -31,7 +33,7 @@ public class MenuInicio extends JPanel {
 
     public void GUIzonaCentral()
     {
-        estilos();
+        this.estilos();
 
         centro = new JPanel();
         centro.setLayout(new GridBagLayout());
@@ -41,33 +43,48 @@ public class MenuInicio extends JPanel {
         cC.weighty = tBoton;
         cC.insets = marginTextCenter;
 
-        botonPrueba = new JButton("Iniciar");
+        //BOTON
+        botonPrueba = new JButton("JUGAR");
+        botonPrueba.setName("boton");
         botonPrueba.setPreferredSize(new Dimension( 2*tBoton, tBoton));
+        botonPrueba.setBackground(colorCentro);
+        botonPrueba.setFont(fontButton);
 
+        //TITULO
         JLabel titulo = new JLabel("Poker");
+        titulo.setText("titulo");
+        titulo.setFont(fontTitle);
+
+        //OTROS TEXTOS
         JLabel instrucciones = new JLabel("Instrucciones");
-        titulo.setPreferredSize(new Dimension(30,30));
-        //titulo.setFont(null);
+        instrucciones.setName("instrucciones");
+        instrucciones.setFont(fontOther);
+
         cC.gridy=0;
         centro.add(titulo, cC);
         cC.gridy++;
         centro.add(instrucciones, cC);
         cC.gridy++;
-
         cC.insets = nonMargin;
         centro.add(botonPrueba, cC);
+
     }
     public void estilos()
     {
         marginTextCenter = new Insets(10,10,tBoton/2,10);
-        colorCentro = new Color(255, 255,255,100);
+        colorCentro = new Color(255, 255,255,120);
         nonMargin = new Insets(0,0,0,0);
+        fontTitle = new Font ("Comic sans", Font.BOLD | Font.ITALIC, 30);
+        fontOther = new Font ("TimesRoman", Font.BOLD, 18);
+        fontButton = new Font ("TimesRoman", Font.BOLD, 20);
     }
+
     public void pintar()
     {
         this.add(fondo);
         fondo.add(centro);
 
     }
+
 
 }
