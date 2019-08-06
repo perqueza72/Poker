@@ -86,17 +86,8 @@ public class Crupier
         barajaCompleta.removeAll(barajaCompleta);
     }
 
-    public void apostar(int cantidad) {
 
-        if(rondas%4 == 0) {
-            apuestaFija += 5;
-        }
-
-        apuestas += cantidad;
-    }
-
-
-    public void decisionDeJerarquia(ArrayList<JLabel> player) {
+    public int decisionDeJerarquia(ArrayList<JLabel> player) {
 
         /*
          * retorna un numero dependiendo de la jerarquia de victoria del poker como
@@ -447,62 +438,7 @@ public class Crupier
             }
         }
 
-
-        // Evaluar algunas condiciones de victoria y retornar su Jerarquia si se cumplen
-
-        if(escaleraReal) {
-            System.out.println("Escalera Real");
-            //return 10;
-        }
-
-        else if(escaleraColor) {
-            System.out.println("Escalera de Color");
-            //return 9;
-        }
-
-        else if(poker) {
-            System.out.println("Poker");
-            //return 8;
-        }
-
-
-        else if(trio && nCeros >= 3) {
-            System.out.println("Full House");
-            //return 7;
-        }
-
-        else if(color) {
-            System.out.println("Color");
-            //return 6;
-        }
-
-        else if(escalera) {
-            System.out.println("Escalera");
-            //return 5;
-        }
-
-        else if(trio) {
-            System.out.println("Trio");
-            //return 4;
-        }
-
-        else if(nCeros >= 2) {
-            System.out.println("Doble Pareja");
-            //return 3;
-        }
-
-        else if(nCeros == 1) {
-            System.out.println("Pareja");
-            //return 2;
-        }
-
-        else if(nCeros == 0) {
-            System.out.println("CartaAlta");
-            //return 1;
-        }
-
-
-        //Reinicio de Arrays.
+//Reinicio de Arrays.
 
         for(int i = 0; i < 7; i++) {
             verificarEscalera[i] = 0;
@@ -527,6 +463,60 @@ public class Crupier
         for(int i = 0; i < 7; i++) {
             valorYPinta[i] = "";
         }
+        // Evaluar algunas condiciones de victoria y retornar su Jerarquia si se cumplen
+
+        if(escaleraReal) {
+            System.out.println("Escalera Real");
+            return 10;
+        }
+
+        else if(escaleraColor) {
+            System.out.println("Escalera de Color");
+            return 9;
+        }
+
+        else if(poker) {
+            System.out.println("Poker");
+            return 8;
+        }
+
+
+        else if(trio && nCeros >= 3) {
+            System.out.println("Full House");
+            return 7;
+        }
+
+        else if(color) {
+            System.out.println("Color");
+            return 6;
+        }
+
+        else if(escalera) {
+            System.out.println("Escalera");
+            return 5;
+        }
+
+        else if(trio) {
+            System.out.println("Trio");
+            return 4;
+        }
+
+        else if(nCeros >= 2) {
+            System.out.println("Doble Pareja");
+            return 3;
+        }
+
+        else if(nCeros == 1) {
+            System.out.println("Pareja");
+            return 2;
+        }
+
+        else if(nCeros == 0) {
+            System.out.println("CartaAlta");
+            return 1;
+        }
+
+        return valor1;
     }
 
     private void sortByValue(int[] numeros, String[] string) {
@@ -554,4 +544,33 @@ public class Crupier
             string[i] = nuevo[i];
         }
     }
+
+    public int decidirGanador(ArrayList<ArrayList> jugadores)
+    {
+        int ganador = 0;
+        int nJugador = jugadores.size(), puntajeMayor=0, empatan=0;
+        int[] puntuacion = new int[nJugador];
+        for(int i=0; i<nJugador; i++)
+        {
+            puntuacion[i] = decisionDeJerarquia(jugadores.get(i));
+            if(puntajeMayor < puntuacion[i]) {
+                puntajeMayor = puntuacion[i];
+                ganador = i;
+            }
+        }
+        for(int i=0; i<nJugador; i++)
+        {
+            if(puntajeMayor == puntuacion[i])
+            {
+                empatan++;
+            }
+        }
+        if(empatan>1)
+        {
+            //ToDo
+            ganador = -1;
+        }
+        return ganador;
+    }
+
 }

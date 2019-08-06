@@ -12,12 +12,14 @@ public class FaseDeJuego extends JPanel {
     private JPanel zonaBaja, zonaAlta, zonaCentral;
     private GuiJugador panelJugador = new GuiJugador(), panelJugador2 = new GuiJugador();
     private Jugador jugador1 = new Jugador(), jugador2 = new Jugador();
+    private ArrayList<ArrayList> jugadores = new ArrayList<>();
     private GuiMesaDeJuego guiMesaDeJuego;
     ArrayList<JLabel> cartasEnMesa = new ArrayList<>();
     private MouseFase mouseFase = new MouseFase();
     private Bid bid = new Bid();
     private Crupier crupier = new Crupier();
 
+    private int nJugadores = 2;
     public void imprimir()
     {
         zonaBaja = new JPanel();
@@ -30,6 +32,11 @@ public class FaseDeJuego extends JPanel {
         //CONVERTIR A Rn :v
         jugador1.iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
         jugador2.iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
+
+        //for(int i=0; i<nJugadores; i++)
+        //    jugadores.add(new Jugador());
+        jugadores.add(jugador1.getBarajaMia());
+        jugadores.add(jugador2.getBarajaMia());
 
         this.inicializarGuiJugadores(panelJugador, zonaBaja, true, jugador1.getBarajaMia());
         this.inicializarGuiJugadores(panelJugador2, zonaAlta, false, jugador2.getBarajaMia());
@@ -92,6 +99,16 @@ public class FaseDeJuego extends JPanel {
                 addCartaMesa();
                 panelJugador.montoUsuario-=dineroAApostar;
                 panelJugador.txtMonto.setText("Monto: " + panelJugador.montoUsuario);
+            }
+            if(crupier.cartasMesa.size() == 5)
+            {
+                int ganador = crupier.decidirGanador(jugadores);
+                //ToDo
+                if(ganador != -1) {
+                    JOptionPane.showMessageDialog(null, "el ganador es: " + (ganador+1), "GANADOR", JOptionPane.INFORMATION_MESSAGE);
+                    panelJugador.montoUsuario = bid.pagarAGanador(panelJugador.montoUsuario);
+                    panelJugador.txtMonto.setText("Monto: " + panelJugador.montoUsuario);
+                }
             }
         }
 
