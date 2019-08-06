@@ -52,14 +52,14 @@ public class MenuInicio extends JPanel {
 
         //TITULO
         JLabel titulo = new JLabel("Poker");
-        titulo.setText("titulo");
+        titulo.setText("POKER");
         titulo.setFont(fontTitle);
 
         //OTROS TEXTOS
         JLabel instrucciones = new JLabel("Instrucciones");
         instrucciones.setName("instrucciones");
         instrucciones.setFont(fontOther);
-
+        //1 oracion, luego 3 oraciones hablando de sigris, 3 oraciones hablando de sepsis, 1 conclusion
         cC.gridy=0;
         centro.add(titulo, cC);
         cC.gridy++;

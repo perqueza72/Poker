@@ -8,27 +8,37 @@ public class GuiJugador extends JPanel {
 
     private final double auxTJugador = Math.round(1.2*(new ImageIcon("src/mazo/fichaVuelta.jpeg").getIconHeight()));
     protected final int widthWindow = 1024, tJugador = (int)auxTJugador;
+    protected int montoUsuario = 1000;
+
     private JPanel guiCartas, guiMonto;
-    private JLabel txtMonto, txtApostar, fondoCartas;
+    private JLabel txtApostar, fondoCartas;
+    protected JLabel txtMonto;
     private Color colorPanelJugadores;
-    private JButton btnApostar;
-    private JTextField txtBoxapostarNDinero;
+    protected JButton btnApostar;
+    protected JTextField txtBoxapostarNDinero;
 
     private Insets regularMargin, nonMargin;
     private Font fontMonto;
-    private ArrayList cartaJugador;
-        public void inicializar(boolean juegaAqui)
+
+        public void inicializar(boolean juegaAqui, ArrayList cartaJugador)
         {
             this.setLayout(new BorderLayout(0,0));
             this.setBackground(colorPanelJugadores);
             this.setPreferredSize(new Dimension(widthWindow/2,tJugador));
+
             this.estilos();
-            this.guiCartas(juegaAqui);
+            this.guiCartas(juegaAqui, cartaJugador);
             this.guiMonto();
             this.pintar(juegaAqui);
         }
 
-        public void guiCartas(boolean juegaAqui)
+        public JLabel darVuelta(JLabel carta)
+        {
+            carta.setIcon(new ImageIcon("src/mazo/fichaVuelta2.jpeg"));
+            return carta;
+        }
+
+        public void guiCartas(boolean juegaAqui, ArrayList<JLabel> cartaJugador)
         {
             fondoCartas = new JLabel(new ImageIcon("src/mazo/ponerMazo.jpg"));
             fondoCartas.setLayout(new GridBagLayout());
@@ -41,16 +51,13 @@ public class GuiJugador extends JPanel {
             guiCartas = new JPanel();
             guiCartas.setLayout(new GridBagLayout());
 
-            cartaJugador = new ArrayList();
-            for(int i=1; i<3; i++)
-                cartaJugador.add(new JLabel(new ImageIcon("src/mazo/corazon ("+ i + ").png")));
-                for(int i=0; i<2; i++) {
-                    if(juegaAqui)
-                        guiCartas.add((JLabel) cartaJugador.get(i), cCartas);
-                    else
-                        guiCartas.add(new JLabel(new ImageIcon("src/mazo/fichaVuelta2.jpeg")));
-                    cCartas.gridx += 1;
-                }
+            for(int i=0; i<2; i++) {
+                if(juegaAqui)
+                    guiCartas.add(cartaJugador.get(i), cCartas);
+                else
+                    guiCartas.add(darVuelta(cartaJugador.get(i)), cCartas);
+                cCartas.gridx += 1;
+            }
 
             guiCartas.setOpaque(false);
         }
@@ -64,7 +71,7 @@ public class GuiJugador extends JPanel {
 
 
             //TEXTOS
-            txtMonto = new JLabel("Monto: $$$");
+            txtMonto = new JLabel("Monto: "+ montoUsuario);
             txtMonto.setFont(fontMonto);
 
             txtApostar = new JLabel("Cuanto quieres apostar?");

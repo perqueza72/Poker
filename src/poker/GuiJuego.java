@@ -9,7 +9,7 @@ public class GuiJuego extends JFrame {
 
     MenuInicio menuInicio;
     MouseInicio mouseInicio = new MouseInicio();
-    FaseDeJuego1 faseDeJuego1;
+    FaseDeJuego faseDeJuego;
 
     final int widthWindow = 1024, heightWindow = 700;
     public GuiJuego()
@@ -42,13 +42,11 @@ public class GuiJuego extends JFrame {
     {
         this.getContentPane().removeAll();
         this.setBackground(Color.BLACK);
-        faseDeJuego1 = new FaseDeJuego1();
-        faseDeJuego1.imprimir();
+        faseDeJuego = new FaseDeJuego();
+        faseDeJuego.imprimir();
 
-        this.add(faseDeJuego1);
+        this.add(faseDeJuego);
 
-        for(int i=0; i<this.getContentPane().getComponentCount(); i++)
-            this.getContentPane().setBackground(Color.BLACK);
         this.repaint();
         this.revalidate();
     }

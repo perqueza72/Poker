@@ -21,6 +21,7 @@ public class GuiMesaDeJuego extends JPanel {
         }
         public void GuiMesa(ArrayList<JLabel> cartaEnMesa)
         {
+                fondo.removeAll();
                 fondo.setLayout(new GridBagLayout());
                 GridBagConstraints cMesa = new GridBagConstraints();
                 cMesa.gridx=0;
