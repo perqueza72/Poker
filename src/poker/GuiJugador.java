@@ -8,7 +8,7 @@ public class GuiJugador extends JPanel {
 
     private final double auxTJugador = Math.round(1.2*(new ImageIcon("src/mazo/fichaVuelta.jpeg").getIconHeight()));
     protected final int widthWindow = 1024, tJugador = (int)auxTJugador;
-    protected int montoUsuario = 1000;
+    protected int montoUsuario;
 
     private JPanel guiCartas, guiMonto;
     private JLabel txtApostar, fondoCartas;
@@ -20,14 +20,16 @@ public class GuiJugador extends JPanel {
     private Insets regularMargin, nonMargin;
     private Font fontMonto;
 
-        public void inicializar(boolean juegaAqui, ArrayList cartaJugador)
+        public void inicializar(boolean juegaAqui, Jugador jugador)
         {
+            montoUsuario = jugador.getFondos();
+
             this.setLayout(new BorderLayout(0,0));
             this.setBackground(colorPanelJugadores);
             this.setPreferredSize(new Dimension(widthWindow/2,tJugador));
 
             this.estilos();
-            this.guiCartas(juegaAqui, cartaJugador);
+            this.guiCartas(juegaAqui, jugador.getBarajaMia());
             this.guiMonto();
             this.pintar(juegaAqui);
         }

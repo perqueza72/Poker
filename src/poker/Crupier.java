@@ -545,14 +545,14 @@ public class Crupier
         }
     }
 
-    public int decidirGanador(ArrayList<ArrayList> jugadores)
+    public int decidirGanador(ArrayList<Jugador> jugadores)
     {
         int ganador = 0;
         int nJugador = jugadores.size(), puntajeMayor=0, empatan=0;
         int[] puntuacion = new int[nJugador];
         for(int i=0; i<nJugador; i++)
         {
-            puntuacion[i] = decisionDeJerarquia(jugadores.get(i));
+            puntuacion[i] = decisionDeJerarquia(jugadores.get(i).getBarajaMia());
             if(puntajeMayor < puntuacion[i]) {
                 puntajeMayor = puntuacion[i];
                 ganador = i;

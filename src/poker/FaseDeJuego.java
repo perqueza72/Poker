@@ -11,8 +11,7 @@ public class FaseDeJuego extends JPanel {
     protected int widthWindow = 1024, heightWindow = 700, tJugador = (int)auxTJugador;
     private JPanel zonaBaja, zonaAlta, zonaCentral;
     private GuiJugador panelJugador = new GuiJugador(), panelJugador2 = new GuiJugador();
-    private Jugador jugador1 = new Jugador(), jugador2 = new Jugador();
-    private ArrayList<ArrayList> jugadores = new ArrayList<>();
+    private ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
     private GuiMesaDeJuego guiMesaDeJuego;
     ArrayList<JLabel> cartasEnMesa = new ArrayList<>();
     private MouseFase mouseFase = new MouseFase();
@@ -29,17 +28,16 @@ public class FaseDeJuego extends JPanel {
         crupier.iniciarBaraja();
         crupier.abrirMesa();
 
-        //CONVERTIR A Rn :v
-        jugador1.iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
-        jugador2.iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
+        //ToDo CONVERTIR A Rn :v
 
-        //for(int i=0; i<nJugadores; i++)
-        //    jugadores.add(new Jugador());
-        jugadores.add(jugador1.getBarajaMia());
-        jugadores.add(jugador2.getBarajaMia());
+        for(int i=0; i<nJugadores; i++) {
+            Jugador jugador = new Jugador();
+            jugador.iniciarBaraja(crupier.retirarCarta(),crupier.retirarCarta());
+            jugadores.add(jugador);
+        }
 
-        this.inicializarGuiJugadores(panelJugador, zonaBaja, true, jugador1.getBarajaMia());
-        this.inicializarGuiJugadores(panelJugador2, zonaAlta, false, jugador2.getBarajaMia());
+        this.inicializarGuiJugadores(panelJugador, zonaBaja, true, jugadores.get(0));
+        this.inicializarGuiJugadores(panelJugador2, zonaAlta, false, jugadores.get(1));
         this.inicializarGuiMesaDeJuego();
 
         this.setLayout(new BorderLayout());
@@ -49,16 +47,16 @@ public class FaseDeJuego extends JPanel {
         this.add(zonaAlta, BorderLayout.NORTH);
         this.add(zonaCentral, BorderLayout.CENTER);
     }
-    public void inicializarGuiJugadores(GuiJugador jugador, JPanel zona, boolean juegaAqui, ArrayList cartaJugador)
+    public void inicializarGuiJugadores(GuiJugador guiJugador, JPanel zona, boolean juegaAqui, Jugador jugador)
     {
         zona.setLayout(new GridBagLayout());
         zona.setPreferredSize(new Dimension(widthWindow, tJugador));
 
         GridBagConstraints c = new GridBagConstraints();
-        jugador.inicializar(juegaAqui, cartaJugador);
+        guiJugador.inicializar(juegaAqui, jugador);
         if(juegaAqui)
-            jugador.btnApostar.addMouseListener(mouseFase);
-        zona.add(jugador, c);
+            guiJugador.btnApostar.addMouseListener(mouseFase);
+        zona.add(guiJugador, c);
     }
     public void inicializarGuiMesaDeJuego()
     {
@@ -105,7 +103,10 @@ public class FaseDeJuego extends JPanel {
                 int ganador = crupier.decidirGanador(jugadores);
                 //ToDo
                 if(ganador != -1) {
+
                     JOptionPane.showMessageDialog(null, "el ganador es: " + (ganador+1), "GANADOR", JOptionPane.INFORMATION_MESSAGE);
+                    repaint();
+                    revalidate();
                     panelJugador.montoUsuario = bid.pagarAGanador(panelJugador.montoUsuario);
                     panelJugador.txtMonto.setText("Monto: " + panelJugador.montoUsuario);
                 }
