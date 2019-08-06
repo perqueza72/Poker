@@ -10,13 +10,13 @@ public class Jugador  extends JPanel {
     private ArrayList<JLabel> barajaMia;
     private int fondos;
 
-    public Jugador() {
+    Jugador() {
 
         barajaMia = new ArrayList<>();
         fondos = 100;
     }
 
-    public void iniciarBaraja(JLabel uno, JLabel dos) {
+    void iniciarBaraja(JLabel uno, JLabel dos) {
 
         barajaMia.add(uno);
         barajaMia.add(dos);
@@ -34,11 +34,11 @@ public class Jugador  extends JPanel {
         fondos += profit;
     }
 
-    public ArrayList<JLabel> getBarajaMia() {
+    ArrayList<JLabel> getBarajaMia() {
         return barajaMia;
     }
 
-    public int getFondos() {
+    int getFondos() {
         return fondos;
     }
 

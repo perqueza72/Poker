@@ -19,6 +19,11 @@ public class GuiMesaDeJuego extends JPanel {
                 GuiMesa(cartaEnMesa);
                 this.add(fondo, c);
         }
+
+        public void reiniciar(ArrayList<JLabel> cartaEnMesa){
+                GuiMesa(cartaEnMesa);
+        }
+
         public void GuiMesa(ArrayList<JLabel> cartaEnMesa)
         {
                 fondo.removeAll();

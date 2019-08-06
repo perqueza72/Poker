@@ -4,29 +4,29 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GuiJugador extends JPanel {
+class GuiJugador extends JPanel {
 
     private final double auxTJugador = Math.round(1.2*(new ImageIcon("src/mazo/fichaVuelta.jpeg").getIconHeight()));
-    protected final int widthWindow = 1024, tJugador = (int)auxTJugador;
-    protected int montoUsuario;
+    private final int tJugador = (int)auxTJugador;
+    int montoUsuario;
 
     private JPanel guiCartas, guiMonto;
-    private JLabel txtApostar, fondoCartas;
-    protected JLabel txtMonto;
+    private JLabel fondoCartas;
+    JLabel txtMonto;
     private Color colorPanelJugadores;
-    protected JButton btnApostar;
-    protected JTextField txtBoxapostarNDinero;
+    JButton btnApostar;
+    JTextField txtBoxapostarNDinero;
 
     private Insets regularMargin, nonMargin;
     private Font fontMonto;
 
-        public void inicializar(boolean juegaAqui, Jugador jugador)
+        void inicializar(boolean juegaAqui, Jugador jugador)
         {
             montoUsuario = jugador.getFondos();
 
             this.setLayout(new BorderLayout(0,0));
-            this.setBackground(colorPanelJugadores);
-            this.setPreferredSize(new Dimension(widthWindow/2,tJugador));
+            int widthWindow = 1024;
+            this.setPreferredSize(new Dimension(widthWindow /2,tJugador));
 
             this.estilos();
             this.guiCartas(juegaAqui, jugador.getBarajaMia());
@@ -34,13 +34,13 @@ public class GuiJugador extends JPanel {
             this.pintar(juegaAqui);
         }
 
-        public JLabel darVuelta(JLabel carta)
+        private JLabel darVuelta(JLabel carta)
         {
             carta.setIcon(new ImageIcon("src/mazo/fichaVuelta2.jpeg"));
             return carta;
         }
 
-        public void guiCartas(boolean juegaAqui, ArrayList<JLabel> cartaJugador)
+        private void guiCartas(boolean juegaAqui, ArrayList<JLabel> cartaJugador)
         {
             fondoCartas = new JLabel(new ImageIcon("src/mazo/ponerMazo.jpg"));
             fondoCartas.setLayout(new GridBagLayout());
@@ -65,7 +65,7 @@ public class GuiJugador extends JPanel {
         }
 
 
-        public void guiMonto()
+        private void guiMonto()
         {
             guiMonto = new JPanel();
             guiMonto.setLayout(new GridBagLayout());
@@ -76,7 +76,7 @@ public class GuiJugador extends JPanel {
             txtMonto = new JLabel("Monto: "+ montoUsuario);
             txtMonto.setFont(fontMonto);
 
-            txtApostar = new JLabel("Cuanto quieres apostar?");
+            JLabel txtApostar = new JLabel("Cuanto quieres apostar?");
 
             //CAJAS DE INPUTS
 
@@ -101,7 +101,7 @@ public class GuiJugador extends JPanel {
             guiMonto.add(btnApostar, cMonto);
         }
 
-        public void pintar(boolean juegaAqui)
+        private void pintar(boolean juegaAqui)
         {
             if(juegaAqui) {
                 this.add(Box.createVerticalStrut(-30), BorderLayout.NORTH);
@@ -114,7 +114,7 @@ public class GuiJugador extends JPanel {
             this.add(fondoCartas, BorderLayout.CENTER);
         }
 
-        public void estilos()
+        private void estilos()
         {
             colorPanelJugadores = new Color(153, 0,76, 100);
             fontMonto = new Font ("Comic sans", Font.BOLD | Font.ITALIC, 25);

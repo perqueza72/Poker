@@ -5,16 +5,15 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class GuiJuego extends JFrame {
+class GuiJuego extends JFrame {
 
-    MenuInicio menuInicio;
-    MouseInicio mouseInicio = new MouseInicio();
-    FaseDeJuego faseDeJuego;
+    private final int widthWindow = 1024, heightWindow = 700;
 
-    final int widthWindow = 1024, heightWindow = 700;
-    public GuiJuego()
+    private MouseInicio mouseInicio;
+    GuiJuego()
     {
-        imprimirMenuInicio();
+        mouseInicio = new MouseInicio();
+        this.imprimirMenuInicio();
         setTitle("Poker");
         this.setResizable(false);
         this.setSize(widthWindow, heightWindow);
@@ -24,11 +23,11 @@ public class GuiJuego extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     }
-    public void imprimirMenuInicio()
+    private void imprimirMenuInicio()
     {
         this.getContentPane().removeAll();
 
-        menuInicio = new MenuInicio();
+        MenuInicio menuInicio = new MenuInicio();
         menuInicio.inicializar();
         menuInicio.setPreferredSize(new Dimension(widthWindow, heightWindow));
         menuInicio.botonPrueba.addMouseListener(mouseInicio);
@@ -38,11 +37,11 @@ public class GuiJuego extends JFrame {
         this.repaint();
         this.revalidate();
     }
-    public void imprimirFase1()
+    private void imprimirFase()
     {
         this.getContentPane().removeAll();
         this.setBackground(Color.BLACK);
-        faseDeJuego = new FaseDeJuego();
+        FaseDeJuego faseDeJuego = new FaseDeJuego();
         faseDeJuego.imprimir();
 
         this.add(faseDeJuego);
@@ -56,7 +55,7 @@ public class GuiJuego extends JFrame {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-                imprimirFase1();
+                imprimirFase();
         }
 
         @Override

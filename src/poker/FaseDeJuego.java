@@ -6,24 +6,35 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class FaseDeJuego extends JPanel {
+class FaseDeJuego extends JPanel {
     private final double auxTJugador = Math.round(1.2*(new ImageIcon("src/mazo/fichaVuelta.jpeg").getIconHeight()));
-    protected int widthWindow = 1024, heightWindow = 700, tJugador = (int)auxTJugador;
-    private JPanel zonaBaja, zonaAlta, zonaCentral;
-    private GuiJugador panelJugador = new GuiJugador(), panelJugador2 = new GuiJugador();
-    private ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
+    final int nJugadores = 2;
+
+    private int widthWindow = 1024, heightWindow = 700, tJugador = (int)auxTJugador;
+
+    private JPanel mesaDeJuego;
+
     private GuiMesaDeJuego guiMesaDeJuego;
-    ArrayList<JLabel> cartasEnMesa = new ArrayList<>();
-    private MouseFase mouseFase = new MouseFase();
+
+    private ArrayList<Jugador> jugadores;
+    private ArrayList<GuiJugador> guisJugadores = new ArrayList<>();
+    private ArrayList<JPanel> zona = new ArrayList<>();
+
     private Bid bid = new Bid();
     private Crupier crupier = new Crupier();
 
-    private int nJugadores = 2;
-    public void imprimir()
+    private MouseFase mouseFase = new MouseFase();
+
+    void imprimir()
     {
-        zonaBaja = new JPanel();
-        zonaAlta = new JPanel();
-        zonaCentral = new JPanel();
+        final String []ubicacion = {"South", "North", "East", "West"};
+
+        mesaDeJuego = new JPanel();
+        jugadores = new ArrayList<>();
+
+        for(int i=0; i<nJugadores; i++) {
+            zona.add(new JPanel());
+        }
 
         crupier.iniciarBaraja();
         crupier.abrirMesa();
@@ -36,18 +47,30 @@ public class FaseDeJuego extends JPanel {
             jugadores.add(jugador);
         }
 
-        this.inicializarGuiJugadores(panelJugador, zonaBaja, true, jugadores.get(0));
-        this.inicializarGuiJugadores(panelJugador2, zonaAlta, false, jugadores.get(1));
+        //ToDo panele
+        for(int i=0; i<nJugadores; i++){
+            GuiJugador guiJugador = new GuiJugador();
+            guisJugadores.add(guiJugador);
+        }
+
+        for(int i=0; i<nJugadores; i++) {
+            boolean juegaAqui = false;
+            if(i == 0)
+                juegaAqui = true;
+            this.inicializarGuiJugadores(guisJugadores.get(i), zona.get(i), juegaAqui, jugadores.get(i));
+        }
         this.inicializarGuiMesaDeJuego();
 
         this.setLayout(new BorderLayout());
         this.setBounds(0,0,widthWindow,heightWindow);
 
-        this.add(zonaBaja, BorderLayout.SOUTH);
-        this.add(zonaAlta, BorderLayout.NORTH);
-        this.add(zonaCentral, BorderLayout.CENTER);
+        //AÑADIR EN PANTALLA
+        for(int i=0; i<nJugadores; i++)
+            this.add(zona.get(i), ubicacion[i]);
+
+        this.add(mesaDeJuego, BorderLayout.CENTER);
     }
-    public void inicializarGuiJugadores(GuiJugador guiJugador, JPanel zona, boolean juegaAqui, Jugador jugador)
+    private void inicializarGuiJugadores(GuiJugador guiJugador, JPanel zona, boolean juegaAqui, Jugador jugador)
     {
         zona.setLayout(new GridBagLayout());
         zona.setPreferredSize(new Dimension(widthWindow, tJugador));
@@ -58,27 +81,47 @@ public class FaseDeJuego extends JPanel {
             guiJugador.btnApostar.addMouseListener(mouseFase);
         zona.add(guiJugador, c);
     }
-    public void inicializarGuiMesaDeJuego()
+    private void inicializarGuiMesaDeJuego()
     {
 
         guiMesaDeJuego = new GuiMesaDeJuego();
 
-        zonaCentral.setLayout(new GridBagLayout());
-        zonaCentral.setPreferredSize(new Dimension(widthWindow, heightWindow-2*tJugador));
+        mesaDeJuego.setLayout(new GridBagLayout());
+        mesaDeJuego.setPreferredSize(new Dimension(widthWindow, heightWindow-2*tJugador));
 
         GridBagConstraints c = new GridBagConstraints();
 
-        for(int i=0; i<3; i++)
-            cartasEnMesa.add(crupier.cartasMesa.get(i));
-
-        guiMesaDeJuego.inicializar(cartasEnMesa);
-        zonaCentral.add(guiMesaDeJuego, c);
+        guiMesaDeJuego.inicializar(crupier.cartasMesa);
+        mesaDeJuego.add(guiMesaDeJuego, c);
     }
 
-    public void addCartaMesa()
+    private void addCartaMesa()
     {
-        cartasEnMesa.add(crupier.addToMesa());
-        guiMesaDeJuego.GuiMesa(cartasEnMesa);
+        crupier.addToMesa();
+        guiMesaDeJuego.GuiMesa(crupier.cartasMesa);
+        this.repaint();
+        this.revalidate();
+    }
+
+    private void reiniciar(){
+
+        crupier.cerrarMesa();
+        for(int i = 0; i < nJugadores; i++){
+            jugadores.get(i).borrarCartas();
+        }
+
+        crupier.iniciarBaraja();
+        crupier.abrirMesa();
+
+        for(int i = 0; i < nJugadores; i++){
+            jugadores.get(i).iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
+        }
+
+        guiMesaDeJuego.reiniciar(crupier.cartasMesa);
+
+
+        //Falta reiniciar los jugadores.
+
         this.repaint();
         this.revalidate();
     }
@@ -89,26 +132,28 @@ public class FaseDeJuego extends JPanel {
         @Override
         public void mouseClicked(MouseEvent e)
         {
-            System.out.println(panelJugador.txtBoxapostarNDinero.getText());
-            String sDineroAApostar = panelJugador.txtBoxapostarNDinero.getText();
+            JPanel panel = (JPanel) ((JButton) e.getSource()).getParent();
+            GuiJugador jugador = (GuiJugador) panel.getParent();
+            JTextField cajaDeTexto = jugador.txtBoxapostarNDinero;
+            String sDineroAApostar = cajaDeTexto.getText();
             int dineroAApostar = Integer.parseInt(sDineroAApostar);
-            panelJugador.txtBoxapostarNDinero.setText("");
-            if(bid.puedeApostar(panelJugador.montoUsuario, dineroAApostar)) {
+            cajaDeTexto.setText("");
+            if(bid.puedeApostar(jugador.montoUsuario, dineroAApostar)) {
                 addCartaMesa();
-                panelJugador.montoUsuario-=dineroAApostar;
-                panelJugador.txtMonto.setText("Monto: " + panelJugador.montoUsuario);
+                jugador.montoUsuario-=dineroAApostar;
+                jugador.txtMonto.setText("Monto: " + (jugador.montoUsuario));
             }
             if(crupier.cartasMesa.size() == 5)
             {
                 int ganador = crupier.decidirGanador(jugadores);
                 //ToDo
-                if(ganador != -1) {
+                if(ganador >= -1) {
 
                     JOptionPane.showMessageDialog(null, "el ganador es: " + (ganador+1), "GANADOR", JOptionPane.INFORMATION_MESSAGE);
-                    repaint();
-                    revalidate();
-                    panelJugador.montoUsuario = bid.pagarAGanador(panelJugador.montoUsuario);
-                    panelJugador.txtMonto.setText("Monto: " + panelJugador.montoUsuario);
+                    jugador.montoUsuario = bid.pagarAGanador(jugador.montoUsuario);
+                    jugador.txtMonto.setText("Monto: " + (jugador.montoUsuario));
+
+                    reiniciar();
                 }
             }
         }
