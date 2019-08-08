@@ -17,7 +17,7 @@ class FaseDeJuego extends JPanel {
     private GuiMesaDeJuego guiMesaDeJuego;
 
     private ArrayList<Jugador> jugadores;
-    private ArrayList<GuiJugador> guisJugadores = new ArrayList<>();
+    private ArrayList<GuiJugador> guisJugadores =  new ArrayList<>();
     private ArrayList<JPanel> zona = new ArrayList<>();
 
     private Bid bid = new Bid();
@@ -28,7 +28,6 @@ class FaseDeJuego extends JPanel {
     void imprimir()
     {
         final String []ubicacion = {"South", "North", "East", "West"};
-
         mesaDeJuego = new JPanel();
         jugadores = new ArrayList<>();
 
@@ -69,17 +68,24 @@ class FaseDeJuego extends JPanel {
             this.add(zona.get(i), ubicacion[i]);
 
         this.add(mesaDeJuego, BorderLayout.CENTER);
+        this.setOpaque(false);
+        for(int i=0; i<getComponentCount();i++)
+            this.getComponent(i).setBackground(new Color(0,0,0,0));
     }
     private void inicializarGuiJugadores(GuiJugador guiJugador, JPanel zona, boolean juegaAqui, Jugador jugador)
     {
         zona.setLayout(new GridBagLayout());
         zona.setPreferredSize(new Dimension(widthWindow, tJugador));
+        zona.setOpaque(true);
 
         GridBagConstraints c = new GridBagConstraints();
         guiJugador.inicializar(juegaAqui, jugador);
         if(juegaAqui)
             guiJugador.btnApostar.addMouseListener(mouseFase);
+        for(int i=0; i<guiJugador.getComponentCount(); i++)
+            guiJugador.setBackground(new Color(0,0,0,0));
         zona.add(guiJugador, c);
+
     }
     private void inicializarGuiMesaDeJuego()
     {
@@ -113,9 +119,6 @@ class FaseDeJuego extends JPanel {
         crupier.iniciarBaraja();
         crupier.abrirMesa();
 
-        for(int i = 0; i < nJugadores; i++){
-            jugadores.get(i).iniciarBaraja(crupier.retirarCarta(), crupier.retirarCarta());
-        }
 
         guiMesaDeJuego.reiniciar(crupier.cartasMesa);
 

@@ -36,13 +36,13 @@ class GuiJugador extends JPanel {
 
         private JLabel darVuelta(JLabel carta)
         {
-            carta.setIcon(new ImageIcon("src/mazo/fichaVuelta2.jpeg"));
+            carta.setIcon(new ImageIcon("src/mazo/trebol (10).png"));
             return carta;
         }
 
         private void guiCartas(boolean juegaAqui, ArrayList<JLabel> cartaJugador)
         {
-            fondoCartas = new JLabel(new ImageIcon("src/mazo/ponerMazo.jpg"));
+            fondoCartas = new JLabel(new ImageIcon("src/mazo/try.jpg"));
             fondoCartas.setLayout(new GridBagLayout());
 
 
@@ -99,6 +99,7 @@ class GuiJugador extends JPanel {
             cMonto.insets = regularMargin;
             cMonto.gridy++;
             guiMonto.add(btnApostar, cMonto);
+            guiMonto.setOpaque(true);
         }
 
         private void pintar(boolean juegaAqui)

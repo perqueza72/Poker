@@ -7,8 +7,8 @@ import java.awt.event.MouseListener;
 
 class GuiJuego extends JFrame {
 
-    private final int widthWindow = 1024, heightWindow = 700;
-
+    final int widthWindow = 1024, heightWindow = 700;
+    private JLabel fondo;
     private MouseInicio mouseInicio;
     GuiJuego()
     {
@@ -40,12 +40,15 @@ class GuiJuego extends JFrame {
     private void imprimirFase()
     {
         this.getContentPane().removeAll();
-        this.setBackground(Color.BLACK);
+        fondo = new JLabel(new ImageIcon("src/mazo/try2.jpg"));
+        fondo.setLayout(null);
+        fondo.setBounds(0,0,widthWindow,heightWindow);
+
         FaseDeJuego faseDeJuego = new FaseDeJuego();
         faseDeJuego.imprimir();
 
-        this.add(faseDeJuego);
-
+        fondo.add(faseDeJuego);
+        this.add(fondo);
         this.repaint();
         this.revalidate();
     }
